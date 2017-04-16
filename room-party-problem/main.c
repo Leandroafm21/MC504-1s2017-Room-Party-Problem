@@ -15,9 +15,8 @@ enum deanStates {notInRoom = 0, inRoom, waiting};            // Possíveis estad
 sem_t mutex;                                                 // Protege os valores de nStudents e deanState
 sem_t turn;                                                  /* Impede que alunos entrem no enquanto o
                                                                 Reitor estiver */
-sem_t clear;                                                 /* Sinaliza que os alunos estão saindo do
-                                                                quarto (nStudents >= 50) */
-sem_t lieIn;                                                 // ???
+sem_t clear;                                                 // Sinaliza que o reitor pode inspecionar o quarto
+sem_t lieIn;                                                 // Sinaliza que o reitor pode entrar no quarto
 
 void party() {
     printf("Festa acontecendo com %d estudantes.\n", nStudents);
