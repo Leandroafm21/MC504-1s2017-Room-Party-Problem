@@ -1,7 +1,8 @@
-#include <stdio.h>
+#include "graphics.h"
 
 int main(int argc, char *argv[])
 {
-    printf("Hello World!\n");
+    drawRoom(23, 1);
+
     return 0;
 }
