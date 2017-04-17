@@ -11,6 +11,7 @@ int main(int argc, char *argv[]) {
     sem_init(&turn, 0, 1);
     sem_init(&clear, 0, 0);
     sem_init(&lieIn, 0, 0);
+    graphics_init();
 
     /* Declaracao das Threads do Reitor e dos Estudantes */
     pthread_t studentThread;

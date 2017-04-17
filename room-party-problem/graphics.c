@@ -51,11 +51,12 @@ int getSideSize(int nStudents){
     }
 }
 
-int sync_printf(const char *format, ...){
+int sync_printf(int nStudents, int hasDean, const char *format, ...){
     va_list args;
     va_start(args, format);
 
     pthread_mutex_lock(&printf_mutex);
+    drawRoom(nStudents, hasDean);
     int r = vprintf(format, args);
     pthread_mutex_unlock(&printf_mutex);
 
