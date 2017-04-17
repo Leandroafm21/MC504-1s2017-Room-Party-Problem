@@ -1,5 +1,9 @@
 #include "graphics.h"
 
+void graphics_init(){
+    pthread_mutex_init(&printf_mutex, NULL);
+}
+
 void drawRoom(int nStudents, int hasDean){
     int sideSize = getSideSize(nStudents) + 2;
     int studentCount = 0;
@@ -45,4 +49,17 @@ int getSideSize(int nStudents){
     }else{
         return MIN_ROOM_SIZE;
     }
+}
+
+int sync_printf(const char *format, ...){
+    va_list args;
+    va_start(args, format);
+
+    pthread_mutex_lock(&printf_mutex);
+    int r = vprintf(format, args);
+    pthread_mutex_unlock(&printf_mutex);
+
+    va_end(args);
+
+    return r;
 }

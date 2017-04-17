@@ -8,7 +8,7 @@ void * deanAction() {
      * libera o semáforo mutex */
     if (nStudents > 0 && nStudents < 10) {
         deanState = waiting;
-        printf("Dean chegou no quarto.\n");
+        sync_printf("Dean chegou no quarto.\n");
         sem_post(&mutex);
         sem_wait(&lieIn);
     }
@@ -17,7 +17,7 @@ void * deanAction() {
      * a festa... */
     if (nStudents >= 10) {
         deanState = inRoom;
-        printf("Dean entrou no quarto.\n");
+        sync_printf("Dean entrou no quarto.\n");
         breakup();
 
         /* ...e se for menor que 15, ele inspeciona o quarto quando todos
@@ -45,7 +45,7 @@ void * deanAction() {
     }
 
     deanState = notInRoom;
-    printf("Dean saiu do quarto.\n");
+    sync_printf("Dean saiu do quarto.\n");
     sem_post(&mutex);
 
     return NULL;
@@ -64,7 +64,7 @@ void * studentAction() {
 
     /* Estudante entra no quarto */
     nStudents += 1;
-    printf("Estudante entrou no Quarto. Total: %d\n", nStudents);
+    sync_printf("Estudante entrou no Quarto. Total: %d\n", nStudents);
 
     /* Se ele for o 10º Estudante a chegar, o Reitor (se estiver do lado de
      * fora) é avisado de que pode entrar (semáforo lieIn)... */
@@ -81,7 +81,7 @@ void * studentAction() {
     /* Depois de curtir, o estudante vai embora */
     sem_wait(&mutex);
     nStudents -= 1;
-    printf("Estudante saiu do Quarto. Total: %d\n", nStudents);
+    sync_printf("Estudante saiu do Quarto. Total: %d\n", nStudents);
 
     /* Se ele for o último estudante a sair e o Reitor estiver do lado de fora,
      * este é avisado de que pode entrar (semáforo lieIn).

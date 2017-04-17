@@ -4,7 +4,11 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += main.c \
-    graphics.c
+    graphics.c \
+    actions.c \
+    threads.c
 
 HEADERS += \
-    graphics.h
+    graphics.h \
+    actions.h \
+    threads.h
