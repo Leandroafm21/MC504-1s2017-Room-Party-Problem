@@ -1,99 +1,43 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include <pthread.h>
-#include <semaphore.h>
-#include <unistd.h>
-#include <time.h>
+#include "threads.h"
 
-/* Número de estudantes da Faculdade */
-#define N_STUDENTS 100
-
-/* Variáveis de Estado */
-int nStudents;                                               // Número de estudantes no quarto
-int deanState;                                               // Estado do Reitor
-enum deanStates {notInRoom = 0, inRoom, waiting};            // Possíveis estados
-sem_t mutex;                                                 // Protege os valores de nStudents e deanState
-sem_t turn;                                                  /* Impede que alunos entrem no enquanto o
-                                                                Reitor estiver */
-sem_t clear;                                                 // Sinaliza que o reitor pode inspecionar o quarto
-sem_t lieIn;                                                 // Sinaliza que o reitor pode entrar no quarto
-
-void party() {
-    printf("Festa acontecendo com %d estudantes.\n", nStudents);
-    sleep(2);
-}
-
-void breakup() {
-    printf("Festa sendo encerrada com %d estudantes.\n", nStudents);
-    sleep(4);
-}
-
-void search() {
-    printf("Reitor procurando o quarto, que esta com %d alunos.\n", nStudents);
-    sleep(1);
-}
-
-void * deanAction() {
-    sem_wait(&mutex);
-
-    if (nStudents > 0 && nStudents < 50) {
-        deanState = waiting;
-        sem_post(&mutex);
-        sem_wait(&lieIn);
-    }
-
-    if (nStudents >= 50) {
-        deanState = inRoom;
-        breakup();
-        sem_wait(&turn);
-        sem_post(&mutex);
-        sem_wait(&clear);
-        sem_post(&turn);
-    }
-
-    else {
-        search();
-    }
-
-    deanState = notInRoom;
-    sem_post(&mutex);
-
-    return NULL;
-}
-
-void * studentAction() {
-    sem_wait(&mutex);
-
-    if (deanState == inRoom) {
-        sem_post(&mutex);
-        sem_wait(&turn);
-        sem_post(&turn);
-        sem_wait(&mutex);
-    }
-
-    nStudents += 1;
-
-    if (nStudents == 50 && deanState == waiting)
-        sem_post(&lieIn);
-    else
-        sem_post(&mutex);
-
-    party();
-
-    sem_wait(&mutex);
-
-    nStudents -= 1;
-
-    if (nStudents == 0 && deanState == waiting)
-        sem_post(&lieIn);
-    else if (nStudents == 0 && deanState == inRoom)
-        sem_post(&clear);
-    else
-        sem_post(&mutex);
-
-    return NULL;
-}
+/* Número de iterações do Código */
+#define N_ITERATIONS 100
 
 int main(int argc, char *argv[]) {
 
+    /* Inicialização dos semáforos */
+    sem_init(&mutex, 0, 1);
+    sem_init(&turn, 0, 1);
+    sem_init(&clear, 0, 0);
+    sem_init(&lieIn, 0, 0);
+
+    /* Declaracao das Threads do Reitor e dos Estudantes */
+    pthread_t studentThread;
+    pthread_t deanThread;
+
+    /* Inicialização da variável random, que contará de quanto em quanto tempo
+     * o Reitor chegará no quarto */
+    srand(time(NULL));
+    int random;
+
+    /* Início da execução do problema */
+    for (int i = 0; i < 50; i++) {
+        random = rand() % 31;
+
+        /* Garante que o Reitor entra no quarto algumas vezes (média 1 a cada
+         * 30 iteracoes), em todas as outras quem entra são os Estudantes */
+        if (random == 15 && deanState == notInRoom)
+            pthread_create(&deanThread, NULL, deanAction, NULL);
+        else
+            pthread_create(&studentThread, NULL, studentAction, NULL);
+        sleep(1);
+    }
+
+    /* Suspende a execução da thread do Reitor */
+    pthread_join(deanThread, NULL);
+
+    printf("Fim da festa! Todos saem do quarto.\n");
+
+    return 0;
 }
