@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
 
     wait = 0;
     /* Início da execução do problema */
-    for (int i = 0; i < 50; ) {
+    for (int i = 0; i < N_ITERATIONS; ) {
         random = rand() % 31;
 
         /* Garante que o Reitor entra no quarto algumas vezes (média 1 a cada
