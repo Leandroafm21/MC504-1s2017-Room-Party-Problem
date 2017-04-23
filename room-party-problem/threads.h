@@ -17,6 +17,9 @@ sem_t clear;
 /* Sinaliza que o Reitor (do lado de fora) pode entrar no quarto */
 sem_t lieIn;
 
+/* Impede que pessoas entrem na sala imediatamente após o Reitor sair */
+int wait;
+
 /**
  * function: deanAction
  * desc: representa a sequência de ações do Reitor

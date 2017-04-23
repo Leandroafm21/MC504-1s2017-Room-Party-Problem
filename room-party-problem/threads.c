@@ -16,6 +16,7 @@ void * deanAction() {
     /* Se o número de estudantes for maior que 10, o Reitor entra e termina
      * a festa... */
     if (nStudents >= 10) {
+        wait = 1;
         deanState = inRoom;
         printf("Dean entrou no quarto.\n");
         breakup();
@@ -36,12 +37,15 @@ void * deanAction() {
         /* Inspeciona o quarto quando todos sairem */
         if (canSearch == true)
             search();
+        wait = 0;
     }
 
     /* Se o número de estudantes for 0, o Reitor simplesmente inspeciona o
      * quarto */
     else {
+        wait = 1;
         search();
+        wait = 0;
     }
 
     deanState = notInRoom;
@@ -74,8 +78,8 @@ void * studentAction() {
         sem_post(&mutex);
 
     /* ...senão, ele simplesmente entra e curte a festa por i segundos (a
-     * thread dorme por i segundos, 1 <= i <= 30). */
-    int random = (rand() % 30) + 1;
+     * thread dorme por i segundos, 5 <= i <= 30). */
+    int random = (rand() % 26) + 5;
     party(random);
 
     /* Depois de curtir, o estudante vai embora */
