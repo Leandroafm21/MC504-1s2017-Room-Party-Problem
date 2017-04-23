@@ -1,4 +1,3 @@
-#include <pthread.h>
 #include "threads.h"
 
 /* Número de iterações do Código */
@@ -7,7 +6,7 @@
 int main(int argc, char *argv[]) {
 
     /* Inicialização dos semáforos */
-    sem_init(&mutex, 0, 1);
+    pthread_mutex_init(&mutex, NULL);
     sem_init(&turn, 0, 1);
     sem_init(&clear, 0, 0);
     sem_init(&lieIn, 0, 0);

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <pthread.h>
 #include <semaphore.h>
 #include <time.h>
 #include <stdbool.h>
@@ -7,7 +8,7 @@
 #include "graphics.h"
 
 /* Protege os valores de nStudents e deanState, garantindo Exclusão Mútua */
-sem_t mutex;
+pthread_mutex_t mutex;
 
 /* Impede a entrada de alunos no quarto enquanto o Reitor estiver */
 sem_t turn;
