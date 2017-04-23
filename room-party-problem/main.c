@@ -21,16 +21,20 @@ int main(int argc, char *argv[]) {
     srand(time(NULL));
     int random;
 
+    wait = 0;
     /* Início da execução do problema */
-    for (int i = 0; i < 50; i++) {
+    for (int i = 0; i < 50; ) {
         random = rand() % 31;
 
         /* Garante que o Reitor entra no quarto algumas vezes (média 1 a cada
          * 30 iteracoes), em todas as outras quem entra são os Estudantes */
-        if (random == 15 && deanState == notInRoom)
-            pthread_create(&deanThread, NULL, deanAction, NULL);
-        else
-            pthread_create(&studentThread, NULL, studentAction, NULL);
+        if (wait == 0) {
+            if (random == 15 && deanState == notInRoom)
+                pthread_create(&deanThread, NULL, deanAction, NULL);
+            else
+                pthread_create(&studentThread, NULL, studentAction, NULL);
+            i++;
+        }
         sleep(1);
     }
 
