@@ -34,3 +34,6 @@ void breakup();
  * return: none
  **/
 void search();
+
+
+void clearScreen();

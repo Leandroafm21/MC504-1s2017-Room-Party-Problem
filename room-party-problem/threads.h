@@ -4,6 +4,7 @@
 #include <time.h>
 #include <stdbool.h>
 #include "actions.h"
+#include "graphics.h"
 
 /* Protege os valores de nStudents e deanState, garantindo Exclusão Mútua */
 sem_t mutex;
