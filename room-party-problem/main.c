@@ -34,12 +34,13 @@ int main(int argc, char *argv[]) {
     wait = 0;
     /* Início da execução do problema */
     for (int i = 0; i < N_ITERATIONS; ) {
-        random = rand() % 31;
+        random = rand() % ((3*minStudentsForBreakup)+1);
 
         /* Garante que o Reitor entra no quarto algumas vezes (média 1 a cada
-         * 30 iteracoes), em todas as outras quem entra são os Estudantes */
+         * 3*minStudentsForBreakup iteracoes), em todas as outras quem entra
+         * são os Estudantes */
         if (wait == 0) {
-            if (random == 15 && deanState == notInRoom)
+            if (random == (3*minStudentsForBreakup)/2 && deanState == notInRoom)
                 pthread_create(&deanThread, NULL, deanAction, NULL);
             else
                 pthread_create(&studentThread, NULL, studentAction, NULL);
