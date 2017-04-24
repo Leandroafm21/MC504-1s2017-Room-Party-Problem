@@ -3,28 +3,28 @@
 void * deanAction() {
     pthread_mutex_lock(&mutex);
 
-    /* Se o número de estudantes no quarto estiver entre 0 e 10 quando
+    /* Se o número de estudantes no quarto estiver entre 0 e minStudentsForBreakup quando
      * o Reitor chega, ele aguarda (semáforo lieIn) do lado de fora e
      * libera o semáforo mutex */
-    if (nStudents > 0 && nStudents < 10) {
+    if (nStudents > 0 && nStudents < minStudentsForBreakup) {
         deanState = waiting;
         sync_printf(nStudents, deanState == inRoom, "Dean chegou no quarto.\n");
         pthread_mutex_unlock(&mutex);
         sem_wait(&lieIn);
     }
 
-    /* Se o número de estudantes for maior que 10, o Reitor entra e termina
+    /* Se o número de estudantes for maior que minStudentsForBreakup, o Reitor entra e termina
      * a festa... */
-    if (nStudents >= 10) {
+    if (nStudents >= minStudentsForBreakup) {
         wait = 1;
         deanState = inRoom;
         sync_printf(nStudents, deanState == inRoom, "Dean entrou no quarto.\n");
         breakup();
 
-        /* ...e se for menor que 15, ele inspeciona o quarto quando todos
+        /* ...e se for menor que maxStudentsForSearch, ele inspeciona o quarto quando todos
          * sairem. */
         bool canSearch = false;
-        if (nStudents < 15)
+        if (nStudents < maxStudentsForSearch)
             canSearch = true;
 
         /* Nenhum estudante pode entrar no quarto enquanto o Reitor estiver
@@ -70,9 +70,9 @@ void * studentAction() {
     nStudents += 1;
     sync_printf(nStudents, deanState == inRoom, "Estudante entrou no Quarto. Total: %d\n", nStudents);
 
-    /* Se ele for o 10º Estudante a chegar, o Reitor (se estiver do lado de
+    /* Se ele for o minStudentsForBreakupº Estudante a chegar, o Reitor (se estiver do lado de
      * fora) é avisado de que pode entrar (semáforo lieIn)... */
-    if (nStudents == 10 && deanState == waiting)
+    if (nStudents == minStudentsForBreakup && deanState == waiting)
         sem_post(&lieIn);
     else
         pthread_mutex_unlock(&mutex);

@@ -7,6 +7,9 @@
 #include "actions.h"
 #include "graphics.h"
 
+/* Variaveis do Problema */
+int minStudentsForBreakup, maxStudentsForSearch;
+
 /* Protege os valores de nStudents e deanState, garantindo Exclusão Mútua */
 pthread_mutex_t mutex;
 
