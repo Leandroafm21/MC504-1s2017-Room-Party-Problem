@@ -6,14 +6,14 @@
 int main(int argc, char *argv[]) {
 
     /* Inicialização das Variaveis do Problema */
-    if (argc != 3 || atoi(argv[1]) < atoi(argv[2])) {
+    if (argc != 3 || atoi(argv[1]) > atoi(argv[2])) {
         printf("Uso: ./roomparty X Y\n");
         printf("X = numero minimo de estudantes para o reitor terminar a festa\n");
         printf("Y = numero maximo de estudantes para o reitor inspecionar o quarto apos o fim da festa\n");
         exit(EXIT_FAILURE);
     }
-    minStudentsForBreakup = argv[1];
-    maxStudentsForSearch = argv[2];
+    minStudentsForBreakup = atoi(argv[1]);
+    maxStudentsForSearch = atoi(argv[2]);
 
     /* Inicialização dos semáforos */
     pthread_mutex_init(&mutex, NULL);
